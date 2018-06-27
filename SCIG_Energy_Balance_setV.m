@@ -1,4 +1,4 @@
-function [P_loss, Q_loss, P_mech, S_grid] = SCIG_Energy_Balance_excitation( P_load, Q_load, Vph, w_mech, w_synch, K_b, K_w, R1, L1, R2, L2, Rm, Lm, Rx, Cx )
+function [P_loss, Q_loss, P_mech, S_grid] = SCIG_Energy_Balance_setV( P_load, Q_load, Vph, w_mech, w_synch, K_b, K_w, R1, L1, R2, L2, Rm, Lm, Rx, Cx )
 %SCIG_ENERGY_BALANCE Summary of this function goes here
 %   This function calcluates the active power (P_out) produced by a 3-phase 
 %   squirrel cage induction generator (SCIG). Also calclulated is the
