@@ -108,7 +108,6 @@ I2 = E./Z_rotor;
 % Calculate excitation current
 Ix = Vph./Z_excite;
 
-% Calculate total real and reactive powers. 
 % Calculate active and reactive power losses in the asynch machine
 Q_rotor = 3*abs(I2).^2.*X2;
 P_rotor = 3*abs(I2).^2.*R2;
@@ -122,16 +121,20 @@ P_core = 3*abs(E).^2./Rm;
 Q_excitation = -3*abs(Ix).^2.*Xx;
 P_excitation = 3*abs(Ix).^2.*Rx;
 
-
-% Total losses/consumption
+% Calculate total real and reactive powers. 
+% Total real losses 
 P_loss= P_bearing + P_windage + P_rotor + P_stator + P_core + P_excitation;
-Q_loss = Q_core + Q_rotor + Q_stator;
+Q_loss = (Q_core + Q_rotor + Q_stator);
 
-% Net output (Produced - consumed)
 P_out = -real(3*Vph^2./Z_total);
-Q_out = -imag(3*Vph^2./Z_total);
+Q_out = imag(3*Vph^2./Z_total);
 % P_out = P_conv - (P_excitation + P_rotor + P_stator + P_core);
 
 
+% if P_mech < P_load
+%     warning('The load exceeds the available mechanical power.')
+% elseif P_mech < P_load + P_loss.total
+%     warning('The load and losses exceed the available mechanical power.')
+% end
 end
 
