@@ -1,5 +1,6 @@
 function [ P, T_or_H_ho, T_or_H_co ] = HeatExNTU_3_low( T_or_H_hi, m_dot_h, p_h,  ...
     T_or_H_ci, m_dot_c, p_c, fluid_h, fluid_c, HeatExType, U, A, T_or_H )
+
 %HeatExNTU Summary 
 %   This function calculates flow and outlet temperatures of a heat exchanger
 %   using the Number of Transfer Units (NTU) method as described in
@@ -157,7 +158,7 @@ end
     
 
 % Determine vaporization temperature for fluids at respective pressures.
-% Initialize pointer locations for relevant variables
+% Initialize pointer locations for fluid quality and relevant temperatures
 Q_Ptr = libpointer('doublePtr', zeros(var_length,1)); % Q is specifically set to 0
 Tvh = zeros(var_length,1); % initialized to 0 temporarily
 Tvc = zeros(var_length,1); % initialized to 0 temporarily
@@ -258,6 +259,11 @@ switch HeatExType
     case 'counter'  % If the heat exchanger is counter-flow
         effectiveness = (1 - exp(-NTU.*(1 - Cr))) ./ ...
                         (1 - Cr.*exp(-NTU.*(1 - Cr)));
+                    
+%       Above equation is undefinded at Cr = 1 
+%       L'hospital is used to determine value in those cases
+        effectiveness(Cr == 1) = NTU./(1 + NTU);
+                            
     case 'parallel' % If the heat exchanger is parallel-flow
         effectiveness = (1 - exp(-NTU.*(1 + Cr))) ./ ...
                         (1 + Cr);
