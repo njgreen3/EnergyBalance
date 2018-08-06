@@ -8,12 +8,12 @@ function [ P_out, Q_out, P_loss, Q_loss] = SCIG_Energy_Balance_excitation( Vll, 
 
 %   Circuit diagram of an Asynchronous machine. 
 %      Iin>   Ix         I1>        Im        I2>
-%              v      R1     jw*X1   v     R2     jw*X2
+%              v      R1     j*X1   v     R2     j*X2
 %     0--------|-----RRRR----XXXX----|----RRRR----XXXX----|
 %              |                    E|                    |
 %     +        R  Rx               |-|-|                  |
 %              R                   |   |                  R
-%     Vph      |               Rm  R   X   jw*Xm          R  R2(1-slip)/slip
+%     Vph      |               Rm  R   X   j*Xm           R  R2(1-slip)/slip
 %              |                   R   X                  R
 %     -       CCC  1/jw*Cx         |   |                  R
 %              |                   |-|-|                  |
@@ -21,21 +21,20 @@ function [ P_out, Q_out, P_loss, Q_loss] = SCIG_Energy_Balance_excitation( Vll, 
 %     0--------|---------------------|--------------------|
   
 % Inputs:
-%   P_mech      Mech power to rotor (P_mech = w_mech*Torque)
 %   Vll         Line to Line voltage at the terminals of the machine
 %   n_mech      Angular velocity of rotor in rpm
 %   f_synch     Synchronous angular velocity in Hz
-%   pole        Number of poles 
+%   poles       Number of poles 
 %   K_b         Bearing coefficient 
 %   K_w         Windage coefficient
 %   R1          Stator resistance in ohm
-%   L1          Stator inductance in ohm
+%   X1          Stator inductance in ohm
 %   R2          Rotor resistance in ohm
-%   L2          Rotor inductance in ohm
+%   X2          Rotor inductance in ohm
 %   Rm          Magnetizing resistance of the core in ohm
-%   Lm          Magnetizing inductance of the core in ohm
+%   Xm          Magnetizing inductance of the core in ohm
 %   Rx          Equivalent Series Resistance (ESR) of external excitation
-%   Cx          External Excitation capacitance in ohm
+%   Xx          External Excitation capacitance in ohm
 %
 % Outputs:
 %   P_out       Three phase net active power flow in W
@@ -46,7 +45,6 @@ function [ P_out, Q_out, P_loss, Q_loss] = SCIG_Energy_Balance_excitation( Vll, 
 
 
 if nargin == 0
-    P_mech = 2.5e4;
     Vll = 220;
     f_synch = 60;
     n_mech = 914.8;

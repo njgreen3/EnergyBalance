@@ -6,14 +6,15 @@ b = (1:1:buffer_size);
 herr= char(b);
 backend = 'HEOS';
 
-workingFluid = 'R245fa';
+% workingFluid = 'R245fa';
+workingFluid = 'R134a';
 
 [handle, sh] = calllib('coolprop','AbstractState_factory',backend,workingFluid,ierr,herr,buffer_size);
 
 
 % Temperature just above triple point is min temp for this curve
 % T_min = ceil(CoolProp.PropsSI('Ttriple',' ',0,' ',0,workingFluid));
-T_min = 288;
+T_min = 280;
 
 % Temperature just below critical point is max temp for this curve
 % T_max = floor(CoolProp.PropsSI('Tcrit',' ',0,' ',0,workingFluid));

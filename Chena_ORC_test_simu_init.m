@@ -34,28 +34,28 @@ end
 % define the source, sink, and working fluids and set up respective handles
 fluid_source = 'water';
 fluid_sink = 'water';
-fluid_wf = 'R245fa';
+fluid_wf = 'R134a';
 backend = 'HEOS';
 [handle_source, ~] = calllib('coolprop','AbstractState_factory',backend,fluid_source,ierr,herr,buffer_size);
 [handle_sink, ~] = calllib('coolprop','AbstractState_factory',backend,fluid_sink,ierr,herr,buffer_size);
 [handle_wf, ~] = calllib('coolprop','AbstractState_factory',backend,fluid_wf,ierr,herr,buffer_size);
 
-Tin_source = 368;
-Tin_sink = 278;
-m_dot_source = 12;
-m_dot_sink = 12;
-m_dot_wf_init = 3;
-H_wf_init = 2.3e+05;
-p_hi = 1e6;
-p_low = 1.5e5;
+Tin_source = 346.48;
+Tin_sink = 277.59;
+m_dot_source = 33.39;
+m_dot_sink = 101.68;
+m_dot_wf_init = 12;
+H_wf_init = 2.6e+05;
+p_hi = 1695000;
+p_low = 439000;
 p_atm = 101325;
 
-U_evap = 1500;
-A_evap = 9.3;
-U_cond = 1400;
-A_cond = 18.6;
+U_evap = 4500;
+A_evap = 30;
+U_cond = 5000;
+A_cond = 50;
 
-eff_turbine = 0.78;
+eff_turbine = 0.8;
 eff_pump = 0.78;
 eff_inverter = 0.93;
 pf_grid = 0.9;

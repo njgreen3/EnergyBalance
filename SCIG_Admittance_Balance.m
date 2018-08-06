@@ -45,14 +45,14 @@ function [P_loss, Q_loss, Vph, f, P_mech ] = SCIG_Admittance_Balance( P_load, Q_
 %   P_mech      Mech power to rotor (P_mech = w_mech*Torque)
 
 if nargin == 0
-    P_load = 4e6;
+    P_load = 3.5e6;
     Q_load = 0;
     f_rated = 60;
     poles = 6;
     n_mech = 1.01*f_rated*120/poles;
     Vline_rated = 6600;
-    K_b = 0.5;
-    K_w = 0.05;
+    K_b = 0.0;
+    K_w = 0.00;
     R1 = 0.044;
     L1 = 0.002;
     R2 = 0.078;
@@ -60,7 +60,7 @@ if nargin == 0
     Rm = 12000;
     Lm = 0.12;
     Rx = 0;
-    Cx = 5.50e-05;
+    Cx = 6.90e-05;
     
 end
 
@@ -134,21 +134,21 @@ if nargin == 0
     
     figure(4)
     surfc(f,Vph,real(Smachine+Sexcite+Sload),'EdgeColor','flat')
-    title('Frequency vs. Phase Voltage vs. Total Conductance')
+    title('Frequency vs. Phase Voltage vs. Active Power')
     xlabel('F (Hz)')
     ylabel('V (V)')
     zlabel('P (W)')
 
     figure(5)
     surfc(f,Vph,imag(Smachine+Sexcite+Sload),'EdgeColor','flat')
-    title('Frequency vs. Phase Voltage vs. Total Susceptance')
+    title('Frequency vs. Phase Voltage vs. Reactive Power')
     xlabel('F (Hz)')
     ylabel('V (V)')
     zlabel('Q (VAR)')
 
     figure(6)
     surfc(f,Vph,abs(Smachine+Sexcite+Sload),'EdgeColor','flat')
-    title('Frequency vs. Phase Voltage vs. Total Admittance')
+    title('Frequency vs. Phase Voltage vs. Apparent Power')
     xlabel('F (Hz)')
     ylabel('V (V)')
     zlabel('S (VA)')
