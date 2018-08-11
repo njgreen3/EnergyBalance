@@ -1,6 +1,6 @@
 % rotor speed
-we = 2*pi*(30:5:70);
-wr = we'.*linspace(.9,1.1,500); %range of speeds to generate Torque-Speed Plot
+we = 2*pi*50;
+wr = we'.*linspace(0,2,500); %range of speeds to generate Torque-Speed Plot
 we = repmat(we',[1 500]);
 wrm = 2/pole_pairs*wr*(60/(2*pi)); %rotor speed (rpm)
 s = (we - wr)./we; %Slip
@@ -16,18 +16,26 @@ Xth = imag(Zth);
 Te = 3*(pole_pairs/2)*abs(Vth).^2*Rr./(s.*we)./((Rth + Rr./s).^2 + (Xth + Xr).^2);
 Pe = Te.*wr*(2/pole_pairs);
 
-figure(1), clf
+figure(1)
 hold on
 grid on
-surfc(we/2/pi,wrm,Te,'EdgeColor','flat')
-xlabel('F_e (Hz)')
-ylabel('n (rpm)')
-zlabel('Torque (Nm)')
+plot(wrm,Te)
+xlabel('n (rpm)')
+ylabel('Torque (Nm)')
+% surfc(we/2/pi,wrm,Te,'EdgeColor','flat')
+% xlabel('F_e (Hz)')
+% ylabel('n (rpm)')
+% zlabel('Torque (Nm)')
 
 figure(2)
-surfc(we/2/pi,wrm,Pe,'EdgeColor','flat')
+plot(wrm,Pe)
 hold on 
 grid on
-xlabel('F_e (Hz)')
-ylabel('Rotor Speed, wrm (rpm)')
-zlabel('Electrical Power, (W)')
+xlabel('Rotor Speed, wrm (rpm)')
+ylabel('Electrical Power, (W)')
+% surfc(we/2/pi,wrm,Pe,'EdgeColor','flat')
+% hold on 
+% grid on
+% xlabel('F_e (Hz)')
+% ylabel('Rotor Speed, wrm (rpm)')
+% zlabel('Electrical Power, (W)')
