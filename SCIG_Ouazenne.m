@@ -58,7 +58,7 @@ if nargin == 0
     L1 = 0.423/(2*pi*f_rated);
     R2 = 0.144;
     L2 = 0.252/(2*pi*f_rated);
-    [magCurve.X, magCurve.Vg_f] = imageinterp;
+    [magCurve.X, magCurve.Vg_f] = imageinterpOuazenne;
     Rm = inf;
     Rx = 0;
     Cx = 240e-06;

@@ -1,21 +1,21 @@
 function [fittedX, fittedE] = imageinterp()
 % format longg;
 % format compact;
-fontSize = 20;
+% fontSize = 20;
 nth_order = 7; %poly fit
 derivArray = nth_order:-1:0;
-rowShift = 425; %to remove axis from image
-columnShift = 125; %to remove axis from image
-I1 = 1;
-Iend = 15; 
-E1 = 180;
-Eend = 22;
+rowShift = 615; %to remove axis from image
+columnShift = 99; %to remove axis from image
+I1 = .0333;
+Iend = 6.5; 
+E1 = 300;
+Eend = .0714;
 
 %===============================================================================
 % Read in a image.
 % folder = pwd;
 folder = 'C:\Users\njgreen3\Documents\Thesis stuff\papers';
-baseFileName = 'magnetizationCurveNoTrend.PNG';
+baseFileName = 'magCurveDandanMa.PNG';
 % Get the full filename, with path prepended.
 fullFileName = fullfile(folder, baseFileName);
 % Check if file exists.
@@ -34,25 +34,35 @@ grayImage = imread(fullFileName);
 % numberOfColorBands should be = 1.
 [~, ~, numberOfColorBands] = size(grayImage);
 if numberOfColorBands > 1
-	% It's not really gray scale like we expected - it's color.
-	% Convert it to gray scale by taking only the green channel.
-	grayImage = grayImage(:, :, 2); % Take green channel.
+    % I want the blue curve. In the blue channel both blue and white are
+    % equal to 255. In all the channels, the black grid lines and labels
+    % are the same (about 0-100 depending on the thickness). I can get only
+    % the blue curve by grabbing the values that aren't equal across
+    % channels.
+	greenImage = grayImage(:, :, 2); % Take green channel.
+    blueImage = grayImage(:,:,3); %Take blue channel.
+    
+    binaryImage = blueImage;
+    binaryImage(blueImage == greenImage) = 0;
+    
 end
-% Display the original gray scale image.
-% subplot(2, 2, 1);
+% % Display the original gray scale image.
+% figure(1)
+% %subplot(1, 2, 1);
 % imshow(grayImage, []);
 % title('Original Grayscale Image', 'FontSize', fontSize);
-% Enlarge figure to full screen.
-% set(gcf, 'Units', 'Normalized', 'OuterPosition', [0 0 1 1]);
-% Give a name to the title bar.
-% set(gcf, 'Name', 'Demo by ImageAnalyst', 'NumberTitle', 'Off') 
-% Binarize to get rid of horrible jpeg noise
-binaryImage = grayImage < 100;
-% Display the original gray scale image.
-% subplot(2, 2, 2);
+% % Enlarge figure to full screen.
+% % set(gcf, 'Units', 'Normalized', 'OuterPosition', [0 0 1 1]);
+% % Give a name to the title bar.
+% % set(gcf, 'Name', 'Demo by ImageAnalyst', 'NumberTitle', 'Off') 
+
+% % Display the original gray scale image.
+% figure(2)
+% % subplot(1, 2, 2);
 % imshow(binaryImage, []);
 % title('Binary Image', 'FontSize', fontSize);
 % axis on;
+
 % Get the rows (y) and columns (x).
 [rows, columns] = find(binaryImage(1:rowShift,columnShift:end));
 
@@ -74,14 +84,14 @@ Xcoeffs = coefficients.*derivArray;
 Xcoeffs(end) = [];
 dEdI = polyval(Xcoeffs, fittedI);
 fittedX = fittedE./fittedI;
-% figure(1)
+% figure(3)
 % plot(fittedX, fittedE, dEdI,fittedE)
 % xlabel('Xm', 'FontSize', fontSize);
 % ylabel('E', 'FontSize', fontSize);
 % legend('E/I', 'dE/dI')
 % % Plot the fitting:
 % % subplot(2,2,3:4);
-% figure(2)
+% figure(4)
 % plot(fittedI, fittedE,fittedI,fittedI*.5, 'b-', 'linewidth', 4);
 % grid on;
 % xlabel('Im', 'FontSize', fontSize);
@@ -89,3 +99,5 @@ fittedX = fittedE./fittedI;
 % % Overlay the original points in red.
 % hold on;
 % plot(Im, E, 'r.', 'LineWidth', .1, 'MarkerSize', .1);
+% figure(5)
+% plot(fittedI,fittedX/(2*pi*50),fittedI,dEdI/(2*pi*50))
