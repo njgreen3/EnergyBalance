@@ -6,15 +6,17 @@ nth_order = 7; %poly fit
 derivArray = nth_order:-1:0;
 rowShift = 425; %to remove axis from image
 columnShift = 125; %to remove axis from image
-I1 = 1*35;
-Iend = 15*35; 
+% I1 = 1*35;
+% Iend = 15*35; 
+I1 = 1*5.3;
+Iend = 15*5.3; 
 E1 = 180;
 Eend = 22;
 
 %===============================================================================
 % Read in a image.
 % folder = pwd;
-folder = 'C:\Users\njgreen3\Documents\Thesis stuff\papers';
+folder = 'C:\Users\njgreen3\Documents\EnergyBalance';
 baseFileName = 'magnetizationCurveNoTrend.PNG';
 % baseFileName = 'magCurveDandanMa.PNG';
 % Get the full filename, with path prepended.
