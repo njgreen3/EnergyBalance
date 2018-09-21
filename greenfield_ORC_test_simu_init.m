@@ -40,21 +40,19 @@ backend = 'HEOS';
 [handle_sink, ~] = calllib('coolprop','AbstractState_factory',backend,fluid_sink,ierr,herr,buffer_size);
 [handle_wf, ~] = calllib('coolprop','AbstractState_factory',backend,fluid_wf,ierr,herr,buffer_size);
 
-P_load = 2e4;
-
-Tin_source = 368;
-Tin_sink = 278;
-m_dot_source = 12;
-m_dot_sink = 12;
+Tin_source = 81.3 + 273.15;
+Tin_sink = 8.5 + 273.15;
+m_dot_source = 937.44*.971/60;  %   937 l/min * .9710 kg/l (@ 81.3 C) * 1 min/ 60 s = 15 kg/s
+m_dot_sink = 937.44*.9998/60;  %   937 l/min * .9998 kg/l (@ 8.5 C) * 1 min/ 60 s = 15 kg/s
 m_dot_wf_init = 3;
-m_dot_wf_max = 8;
+m_dot_wf_max = 12;
 H_wf_init = 2.3e+05;
 p_hi = 1e6;
 p_low = 1.5e5;
 p_atm = 101325;
 
 U_evap = 1500;
-A_evap = 10.3;
+A_evap = 20.3;
 U_cond = 1400;
 A_cond = 20.6;
 
@@ -97,5 +95,5 @@ L2 = Lr;
 Xm = .4;
 Xx = 1/(2*pi*f_rated*Cx);
 
-K_b = 0;
-K_w = 0;
+K_b = 1;
+K_w = .005;
