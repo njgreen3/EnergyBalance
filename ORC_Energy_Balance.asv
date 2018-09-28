@@ -224,7 +224,7 @@ if plotflag
     R245faPTcurve
     hold on
     
-    plot(T_working_init,pressure_h,'or')
+    plot(T_working_init,pressure_h,'xr')
     plot(ORC_Temperature.expander_in,pressure_h,'xm')
     plot(ORC_Temperature.expander_out,pressure_l,'xc')
     plot(ORC_Temperature.pump_in,pressure_l,'xg')

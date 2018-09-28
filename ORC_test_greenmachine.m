@@ -21,8 +21,8 @@ m_dot_source = 18.9;
 m_dot_sink = 12.6;
 
 % Temperatures of source, sink, and working fluid in K
-T_source = 363;
-T_sink = 283;
+T_source = 363.7;
+T_sink = 283.15;
 % T_working_init = 20 + 273;
 
 % one atmosphere of pressure in pa for the pressure of the source and sink
@@ -57,18 +57,18 @@ n = 0;
 err_T = 1;
 
 % maximum pressure differential across expander
-max_pres_diff = 2.2e5;
+min_pres_diff = 2.2e5;
 
 % cycle through high pressures
-for pressure_h = 2.0e5:5e4:10.0e5
+for pressure_h = 4.0e5:5e4:10.0e5
 %   cycle through low pressures ensuring low pressure is always lower than high pressure
 %     disp(['high pressure ' num2str(pressure_h) ' pa'])
-    for pressure_l = 1e5:2.5e4:pressure_h-2.5e4
+    for pressure_l = .5e5:2.5e4:pressure_h-2.5e5
 %         disp(['low pressure ' num2str(pressure_l) ' pa'])
 %       Try ORC function. Likely errors include trying to use Coolprop to
 %       analyze a fluid directly on a vaporization curve because it 
 %       cannot determine phase with given info
-        if pressure_h - pressure_l > max_pres_diff
+        if pressure_h - pressure_l < min_pres_diff
             continue
         end
         

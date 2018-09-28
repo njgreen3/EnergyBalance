@@ -54,7 +54,7 @@ p_atm = 101325;
 U_evap = 1500;
 A_evap = 20.3;
 U_cond = 1400;
-A_cond = 20.6;
+A_cond = 20.3;
 
 eff_turbine = 0.78;
 eff_pump = 0.78;
