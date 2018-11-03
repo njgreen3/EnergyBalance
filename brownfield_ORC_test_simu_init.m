@@ -40,24 +40,37 @@ backend = 'HEOS';
 [handle_sink, ~] = calllib('coolprop','AbstractState_factory',backend,fluid_sink,ierr,herr,buffer_size);
 [handle_wf, ~] = calllib('coolprop','AbstractState_factory',backend,fluid_wf,ierr,herr,buffer_size);
 
-Tin_source = 95 + 273.15;
-Tin_sink = 5 + 273.15;
-m_dot_source = 6 * 0.9619;
-m_dot_sink = 6 * 0.99997;
-m_dot_wf_init = 3;
-m_dot_wf_max = 8;
-H_wf_init = 2.3e+05;
-p_hi = 1e6;
-p_low = 1.5e5;
+Tin_source.time = 0;
+Tin_source.signals.values = 95 + 273.15;
+Tin_sink.time = Tin_source.time;
+Tin_sink.signals.values = 5 + 273.15;
+m_dot_source.time = Tin_source.time;
+m_dot_source.signals.values = 6 * 0.9619;
+m_dot_sink.time = Tin_source.time;
+m_dot_sink.signals.values = 7 * 0.99997;
+m_dot_wf_init = 1.5;
+m_dot_wf_max = 10;
+H_wf_init = 2.4e+05;
 p_atm = 101325;
+p_hi.time = Tin_source.time;
+p_hi.signals.values = 6.0e5;
+p_low.time = Tin_source.time;
+p_low.signals.values = 1.4e5;
+
+% P_setpoint.time =           [0;     2;      2.1;    4;      4.1;    6;      6.1;    8;      8.1;    10];
+% P_setpoint.signals.values = [2.7e4; 2.7e4;  3.2e4;  3.2e4;  3.5e4;  3.5e4;  3.9e4;  3.9e4;  4.1e4;  4.1e4];
+P_setpoint.time =           0;
+P_setpoint.signals.values = 2.78e4;%3.45e4;%4.4e4;%
+
 
 U_evap = 1500;
-A_evap = 20.3;
+A_evap = 1*37.83;%66.5;%26.5;%
 U_cond = 1400;
-A_cond = 20.3;
+A_cond = 102.5;%36.5;%66.5;%
 
 eff_turbine = 0.78;
-eff_pump = 0.78;
+eff_pump = 0.70;
+eff_pumpdrive = 0.9;
 eff_inverter = 0.93;
 pf_grid = 0.9;
 
@@ -95,5 +108,5 @@ L2 = Lr;
 Xm = .4;
 Xx = 1/(2*pi*f_rated*Cx);
 
-K_b = 1;
-K_w = .005;
+K_b = 0.5;
+K_w = .003;

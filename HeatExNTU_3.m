@@ -103,16 +103,18 @@ Hvc_min = CoolProp.PropsSI('H','P',p_c,'Q',0,fluid_c);
 % command will fail. If that happens then the specific heat will be set to 
 % inf so its temperature will not change even though heat is exchanged.
 try
-    Ch = CoolProp.PropsSI('C', 'T', Thi, 'P', p_h, fluid_h);    % J/(kg K)
+    Ch = CoolProp.PropsSI('C', 'H', Hhi, 'P', p_h, fluid_h);    % J/(kg K)
 catch %ME
     Ch = inf;
 end
 try
-    Cc = CoolProp.PropsSI('C', 'T', Tci, 'P', p_c, fluid_c);    % J/(kg K)
+    Cc = CoolProp.PropsSI('C', 'H', Hci, 'P', p_c, fluid_c);    % J/(kg K)
 catch %ME
 %     w = warning('query','last')
     Cc = inf;
 end
+Ch(Hhi <= Hvh_max & Hhi > Hvh_min) = inf;    % J/(kg K)
+Cc(Hci < Hvc_max & Hci >= Hvc_min) = inf;    % J/(kg K)
 
 % Calculate the heat capacity rates of the hot and cool fluids
 Ch_rate = Ch * m_dot_h;     % W/K
@@ -178,8 +180,10 @@ Tco = Tci + deltaTc;
 
 % The cool prop function may fail if Tho = vaporization temperature
 try
+%     disp('try')
     Hho = CoolProp.PropsSI('H','P',p_h,'T',Tho,fluid_h);
 catch %ME
+%     disp('fail')
     Hho = Hhi - P./m_dot_h;
 end
 % The cool prop function may fail if Tco = vaporization temperature

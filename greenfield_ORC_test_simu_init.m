@@ -40,25 +40,34 @@ backend = 'HEOS';
 [handle_sink, ~] = calllib('coolprop','AbstractState_factory',backend,fluid_sink,ierr,herr,buffer_size);
 [handle_wf, ~] = calllib('coolprop','AbstractState_factory',backend,fluid_wf,ierr,herr,buffer_size);
 
-Tin_source = 81.3 + 273.15;
-Tin_sink = 8.5 + 273.15;
-m_dot_source = 937.44*.971/60;  %   937 l/min * .9710 kg/l (@ 81.3 C) * 1 min/ 60 s = 15 kg/s
-m_dot_sink = 937.44*.9998/60;  %   937 l/min * .9998 kg/l (@ 8.5 C) * 1 min/ 60 s = 15 kg/s
-m_dot_wf_init = 3;
-m_dot_wf_max = 8;
+Tin_source.time = [0; 3.4; 3.5; 6.9; 7; 10.4; 10.5; 14;];
+Tin_source.signals.values = [91.3 + 273.15;91.3 + 273.15;91.3 + 273.15; 91.3 + 273.15; 91.3 + 273.15; 91.3 + 273.15; 91.3 + 273.15; 91.3 + 273.15;];
+Tin_sink.time = Tin_source.time;
+Tin_sink.signals.values = [8.5 + 273.15;8.5 + 273.15;8.5 + 273.15; 8.5 + 273.15; 3.5 + 273.15;3.5 + 273.15; 3.5 + 273.15;  3.5 + 273.15;];
+m_dot_source.time = Tin_source.time;
+m_dot_source.signals.values = [937.44*.971/60;937.44*.971/60; 937.44*.971/60;937.44*.971/60; 937.44*.971/60;937.44*.971/60; 937.44*.971/60;937.44*.971/60;];  %   937 l/min * .9710 kg/l (@ 81.3 C) * 1 min/ 60 s = 15 kg/s
+m_dot_sink.time = Tin_source.time;
+m_dot_sink.signals.values = [937.44*.9998/60;937.44*.9998/60;937.44*.9998/60;937.44*.9998/60;937.44*.9998/60;937.44*.9998/60;937.44*.9998/60;937.44*.9998/60;];  %   937 l/min * .9998 kg/l (@ 8.5 C) * 1 min/ 60 s = 15 kg/s
+m_dot_wf_init = 4;
+m_dot_wf_max = 20;
 H_wf_init = 2.3e+05;
-p_hi.time =             [0];%     2.9;    3;      5.9;    6;      10];
-p_hi.signals.values =   [0.8e6];%   1e6;    1.1e6;  1.1e6;  0.8e6;  0.8e6];
-p_low = 1.5e5;
 p_atm = 101325;
+p_hi.time = Tin_source.time;
+p_hi.signals.values = [6.0e5;6.0e5;6.0e5;6.0e5;5.7e5;5.7e5;5.7e5;5.7e5;];
+p_low.time = Tin_source.time;
+p_low.signals.values = [1.4e5;1.4e5;1.4e5;1.4e5;1.3e5;1.3e5;1.3e5;1.3e5;];
+
+P_setpoint.time = Tin_source.time;
+P_setpoint.signals.values = [2.75e4;2.75e4;4.0e4;4.0e4;3.08e4;3.08e4;4.2e4;4.2e4;];%[3.0e4;3.0e4;3.8e4;3.8e4;];
 
 U_evap = 1500;
-A_evap = 20.3;
+A_evap = 37.83;%40.3;%
 U_cond = 1400;
-A_cond = 20.3;
+A_cond = 102.5;%60.3;%
 
 eff_turbine = 0.78;
-eff_pump = 0.78;
+eff_pump = 0.70;
+eff_pumpdrive = 0.9;
 eff_inverter = 0.93;
 pf_grid = 0.9;
 
@@ -96,5 +105,5 @@ L2 = Lr;
 Xm = .4;
 Xx = 1/(2*pi*f_rated*Cx);
 
-K_b = 1;
-K_w = .005;
+K_b = 0.5;
+K_w = .003;

@@ -83,36 +83,36 @@ if nargin == 0
     sinkFluid = 'Water';
 
 % Mass flow rates of fluid in kg/s
-    m_dot_working = 1;
-    m_dot_source = 12;  % 12 kg/s is just shy of 200 gal/min of water
-    m_dot_sink = 12;    % 12 kg/s is just shy of 200 gal/min of water
+    m_dot_working = 2.149;
+    m_dot_source = 6 * 0.9619;%7.28;  % 12 kg/s is just shy of 200 gal/min of water
+    m_dot_sink = 9 * 0.99997;%7.53;    % 12 kg/s is just shy of 200 gal/min of water
 
 % Temperautres of source, sink, and working fluid in K
-    T_source = 363.7;
-    T_sink = 283.15;
-    T_working_init = 365.2; %12 + 273; %30 + 273;
+    T_source = 95 + 273.15;%(194.75+459.67)*5/9;%352.6;
+    T_sink = 5 + 273.15;%(52.678+459.67)*5/9;%284.6;
+    T_working_init = 295.6; %365.2; %12 + 273; %30 + 273;
 
 % one atmosphere of pressure in pa for the pressure of the source and sink
     atm = 101325;
 
 % High and low pressure of working fluid in Pa
-    pressure_h = 8.8e5; %7.0e5;
-    pressure_l = 0.6e5; %1.1e5;
+    pressure_h = 6.0e5;%atm+5.8e5;%1.0e6;   %8.8e5; %
+    pressure_l = 1.4e5; %atm+.55e5;%1.7e5; %0.6e5; %
     pressure_source = atm;
     pressure_sink = atm;
 
 % pump and expander isentropic efficiencies
-    eff_pump = 0.78;
+    eff_pump = 0.7;
     eff_expander = 0.78;
     
 % heat exchanger parameters for evaporator
     heatExTypeVap = 'counter';
-    heatExAVap = 9.3; %12; %268.5
+    heatExAVap = 66.5;%33.26; %9.3; %12; %268.5
     heatExUVap = 1500;
     
 % heat exchanger parameters for condensor
     heatExTypeCond = 'counter';
-    heatExACond = 18.6; %24; %268.5
+    heatExACond = 66.5;%28.3; %18.6; %24; %268.5
     heatExUCond = 1400;
     
     plotflag = 1;
@@ -128,6 +128,7 @@ end
 H_source_in = CoolProp.PropsSI('H', 'P', pressure_source, 'T', T_source, sourceFluid);
 H_sink_in = CoolProp.PropsSI('H', 'P', pressure_sink, 'T', T_sink, sinkFluid);
 H_working_init = CoolProp.PropsSI('H', 'P', pressure_h, 'T', T_working_init, workingFluid);
+% H_working_init = 233789.4;
 
 
 % Initialize output structures to NaN
@@ -149,6 +150,7 @@ ORC_Temperature = struct(   'source_in', NaN, ...
 ORC_Temperature.source_in = T_source;
 ORC_Temperature.sink_in = T_sink;
 ORC_Temperature.working_init = T_working_init;
+S_working_init = CoolProp.PropsSI('S', 'P', pressure_h, 'H', H_working_init, workingFluid);
 
 % disp('working fluid phase before boiler:');
 % disp(CoolProp.PhaseSI('P', pressure_h, 'T', T_working_init, workingFluid));
@@ -167,6 +169,7 @@ ORC_Temperature.working_init = T_working_init;
 % % Used with HeatExNTU_3 to go from H to T
 ORC_Temperature.source_out = CoolProp.PropsSI('T', 'P', pressure_source, 'H', H_source_out, sourceFluid);
 ORC_Temperature.expander_in = CoolProp.PropsSI('T', 'P', pressure_h, 'H', H_expander_in, workingFluid);
+S_expander_in = CoolProp.PropsSI('S', 'P', pressure_h, 'H', H_expander_in, workingFluid);
 
 % power into the system is arbitrarily defined as negative
 ORC_Power.inHeat = -ORC_Power.inHeat;
@@ -182,6 +185,7 @@ ORC_Power.inHeat = -ORC_Power.inHeat;
 
 % % Used with HeatExNTU_3 to go from H to T
 ORC_Temperature.expander_out = CoolProp.PropsSI('T', 'P', pressure_l, 'H', H_expander_out, workingFluid);
+S_expander_out = CoolProp.PropsSI('S', 'P', pressure_l, 'H', H_expander_out, workingFluid);
 
 % disp('working fluid phase before condensor:');
 % disp(CoolProp.PhaseSI('P', pressure_l, 'H', H_expander_out, workingFluid));
@@ -200,6 +204,7 @@ ORC_Temperature.expander_out = CoolProp.PropsSI('T', 'P', pressure_l, 'H', H_exp
 % % Used with HeatExNTU_3 to go from H to T
 ORC_Temperature.pump_in = CoolProp.PropsSI('T', 'P', pressure_l, 'H', H_pump_in, workingFluid);
 ORC_Temperature.sink_out = CoolProp.PropsSI('T', 'P', pressure_sink, 'H', H_sink_out, sinkFluid);
+S_pump_in = CoolProp.PropsSI('S', 'P', pressure_l, 'H', H_pump_in, workingFluid);
 
 % disp('working fluid phase before pump:');
 % disp(CoolProp.PhaseSI('P', pressure_l, 'H', H_pump_in, workingFluid));
@@ -214,21 +219,42 @@ ORC_Temperature.sink_out = CoolProp.PropsSI('T', 'P', pressure_sink, 'H', H_sink
 
 % % Used to go from H to T
 ORC_Temperature.pump_out= CoolProp.PropsSI('T', 'P', pressure_h, 'H', H_pump_out, workingFluid);
-
+S_pump_out = CoolProp.PropsSI('S', 'P', pressure_h, 'H', H_pump_out, workingFluid);
 
 % disp('working fluid phase after pump:');
 % disp(CoolProp.PhaseSI('P', pressure_h, 'H', H_pump_out, workingFluid));
 
 if plotflag
 
-    R245faPTcurve
-    hold on
+    [pt_handle, hp_handle, st_handle] = R245faPTcurve(workingFluid);
     
+    figure(pt_handle)
+    hold on
     plot(T_working_init,pressure_h,'or')
     plot(ORC_Temperature.expander_in,pressure_h,'xm')
     plot(ORC_Temperature.expander_out,pressure_l,'xc')
     plot(ORC_Temperature.pump_in,pressure_l,'xg')
     plot(ORC_Temperature.pump_out,pressure_h,'xb')
+    hold off
+    
+    figure(hp_handle)
+    hold on
+    plot(H_working_init,pressure_h,'or')
+    plot(H_expander_in,pressure_h,'xm')
+    plot(H_expander_out,pressure_l,'xc')
+    plot(H_pump_in,pressure_l,'xg')
+    plot(H_pump_out,pressure_h,'xb')
+    hold off
+    
+    figure(st_handle)
+    hold on
+    plot(S_working_init,T_working_init,'or')
+    plot(S_expander_in,ORC_Temperature.expander_in,'xm')
+    plot(S_expander_out,ORC_Temperature.expander_out,'xc')
+    plot(S_pump_in,ORC_Temperature.pump_in,'xg')
+    plot(S_pump_out,ORC_Temperature.pump_out,'xb')
+    hold off
+    
 end
 
 
