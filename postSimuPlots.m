@@ -30,7 +30,7 @@ for n = 1:length(case_ind)
 end
 hold off
 % legend('Vaporization','Summer Low Flow','Summer High Flow','Winter Low Flow','Winter High Flow','Location','eastoutside')
-legend('Vaporization','Brownfield Test')
+% legend('Vaporization','Brownfield Test')
 
 subplot(hp_handle)
 hold on
@@ -45,7 +45,7 @@ for n = 1:length(case_ind)
 end
 hold off
 % legend('Vaporization','Condensation','Summer Low Flow','Summer High Flow','Winter Low Flow','Winter High Flow','Location','eastoutside')
-legend('Vaporization','Condensation','Brownfield Test')
+% legend('Vaporization','Condensation','Brownfield Test')
 
 % find parameter index for entropy
 s_ind = calllib('coolprop','get_param_index','S');
@@ -76,8 +76,51 @@ for n = 1:length(case_ind)
 end
 hold off
 % legend('Vaporization','Condensation','Summer Low Flow','Summer High Flow','Winter Low Flow','Winter High Flow','Location','eastoutside')
-legend('Vaporization','Condensation','Brownfield Test')
+% legend('Vaporization','Condensation','Brownfield Test')
 
+figure()
+plot(condPout/1e3)
+hold on
+plot(evapPin/1e3)
+hold off
+ylabel('Thermal Power (kW)')
+title('Thermal Power')
+xlabel('Time (seconds)')
+legend('Condenser','Evaporator')
+
+figure()
+plot(wf_flow)
+ylabel('Mass Flow Rate (kg/s)')
+xlabel('Time (seconds)')
+title('Working Fluid Flow')
+
+figure()
+plot(T_water)
+ylabel('Temperature (K)')
+xlabel('Time (seconds)')
+title('Water Temperature')
+legend('Source In','Source Out', 'Sink In', 'Sink out','Location', 'east')
+
+figure()
+plot(T_wf)
+ylabel('Temperature (K)')
+xlabel('Time (seconds)')
+title('Working Fluid Temperature')
+legend('Pump Outlet','Expander Inlet', 'Expander Outlet', 'Pump Inlet','Location', 'east')
+
+figure()
+plot(mechPout/1e3)
+hold on
+plot(mechPneeded/1e3)
+plot(genPout/1e3)
+plot(invPout/1e3)
+plot(pumpPin/-1e3)
+% plot(errP/1e3)
+hold off
+ylabel('Power (kW)')
+xlabel('Time (seconds)')
+title('ORC Power')
+legend('Mechanical','Mech. Needed','Generator','Inverter','Pump Input')
 
 calllib('coolprop','AbstractState_free', handle_temp, ierr,herr,buffer_size);
 clear handle_temp T_temp H_temp T_ptr H_ptr
