@@ -1,4 +1,5 @@
-path_to_include= 'C:\Users\njgreen3\Documents\MATLAB\CoolPropStuff'; %specify path to coolprop's include folder
+% path_to_include= 'C:\Users\njgreen3\Documents\MATLAB\CoolPropStuff'; %specify path to coolprop's include folder
+path_to_include= 'C:\Users\Nathan\Documents\MATLAB\CoolProp.sources\include'; %specify path to coolprop's include folder
 
 % Loading shared library
 if ~libisloaded('coolprop') %checking whether library is already loaded
@@ -55,20 +56,20 @@ m_dot_wf_max = 12;
 H_wf_init = 2.5e+05;
 p_atm = 101325;
 p_hi.time =             Tin_source.time;    %0;%
-p_hi.signals.values =   p_atm + 1e5*[5.8; 5.8; 5.8; 5.8; 4.5; 4.5; 4.5; 4.5;];  %1e6;%
-% p_hi.signals.values =   p_atm + 1e5*[5.8; 5.8; 6.5; 6.5; 5.0; 5.0; 5.0; 5.0;];  %1e6;%
+p_hi.signals.values =   p_atm + 1e5*[5.8; 5.8; 6.5; 6.5; 5.0; 5.0; 5.0; 5.0;]; %small area test
+% p_hi.signals.values =   p_atm + 1e5*[5.8; 5.8; 5.8; 5.8; 4.5; 4.5; 4.5; 4.5;]; %large area test
 p_low.time =            Tin_source.time;    %0;%
-p_low.signals.values =  p_atm + 1e5*[0.4; 0.4; 0.4; 0.4; 0.4; 0.4; 0.4; 0.4;];  %1.7e5;%
-% p_low.signals.values =  p_atm + 1e5*[0.4; 0.4; 0.7; 0.7; 0.4; 0.4; 0.6; 0.6;];  %1.7e5;%
+p_low.signals.values =  p_atm + 1e5*[0.4; 0.4; 0.7; 0.7; 0.4; 0.4; 0.6; 0.6;]; %small area test
+% p_low.signals.values =  p_atm + 1e5*[0.4; 0.4; 0.4; 0.4; 0.4; 0.4; 0.4; 0.4;]; %large area test
 
 P_setpoint.time = Tin_source.time;
 % P_setpoint.time = [0;    2.4;      2.5;    4.9;      5.0;    7.4;      7.5;   10;];
-% P_setpoint.signals.values = [35700; 35700; 26000; 26000; 25000; 25000; 19000; 19000;];
-P_setpoint.signals.values = 1*[39600; 39600; 31000; 31000; 28500; 28500; 21900; 21900;];
+P_setpoint.signals.values = [35700; 35700; 26000; 26000; 25000; 25000; 19000; 19000;];  %small area test
+% P_setpoint.signals.values = [39600; 39600; 31000; 31000; 28500; 28500; 21900; 21900;];  %large area test
 
 
 U_evap = 1500;
-A_evap = 26.48*4;%33.26;%9.3;
+A_evap = 26.48*1;%33.26;%9.3;
 U_cond = 1400;
 A_cond = 102.48;%28.3;%18.6;
 

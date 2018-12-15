@@ -1,4 +1,5 @@
-path_to_include= 'C:\Users\njgreen3\Documents\MATLAB\CoolPropStuff'; %specify path to coolprop's include folder
+%path_to_include= 'C:\Users\njgreen3\Documents\MATLAB\CoolPropStuff'; %specify path to coolprop's include folder
+path_to_include= 'C:\Users\Nathan\Documents\MATLAB\CoolProp.sources\include'; %specify path to coolprop's include folder
 
 % Loading shared library
 if ~libisloaded('coolprop') %checking whether library is already loaded

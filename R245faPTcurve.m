@@ -78,15 +78,15 @@ pt_plot_handle = subplot(3,1,1);
 semilogy(T_vap_curve,P_vap_curve)
 xlabel('Temperature (K)')
 ylabel('Pressure (Pa)')
-title(['P-T diagram for ' workingFluid ])
+title(['p-T diagram for ' workingFluid ])
 
 hp_plot_handle = subplot(3,1,2);
 semilogy(H_vap_curve,P_vap_curve)
 hold on
 plot(H_cond_curve,P_vap_curve)
 ylabel('Pressure (pa)')
-xlabel('Enthalpy (J/kg)')
-title(['P-H diagram for ' workingFluid ])
+xlabel('Mass Specific Enthalpy (J/kg)')
+title(['p-h diagram for ' workingFluid ])
 hold off
 
 st_plot_handle = subplot(3,1,3);
@@ -94,7 +94,7 @@ plot(S_vap_curve,T_vap_curve)
 hold on
 plot(S_cond_curve,T_vap_curve)
 ylabel('Temperature (K)')
-xlabel('Entropy (J/kg-K)')
+xlabel('Mass Specific Entropy (J/kg-K)')
 title(['S-T diagram for ' workingFluid ])
 hold off
 

@@ -6,16 +6,19 @@
 % Values for verification
 % case_ind = [24 49 74 100];
 % cursor_shapecolor = ['xk'; 'ok'; 'sk'; 'dk';];
+% case_test = 'gm';
 
 % Values for green field
 % case_ind = [34 69 104 140];
 % cursor_shapecolor = ['xk'; 'ok'; 'sk'; 'dk';];
+% case_test = 'gf';
 
 % Values for brown field
 % case_ind = [19 39 59 79];
 % cursor_shapecolor = ['xk'; 'ok'; 'sk'; 'dk';];
-case_ind = 50;
+case_ind = 400;
 cursor_shapecolor = 'xk';
+case_test = 'bf';
 
 subplot(pt_handle)
 hold on
@@ -29,8 +32,14 @@ for n = 1:length(case_ind)
 %     plot(ORC_Temperature.pump_out,pressure_h,'xb')
 end
 hold off
-% legend('Vaporization','Summer Low Flow','Summer High Flow','Winter Low Flow','Winter High Flow','Location','eastoutside')
-% legend('Vaporization','Brownfield Test')
+switch case_test
+    case 'gm'
+        legend('Vaporization','Test 1','Test 2','Test 3','Test 4','Location','eastoutside')
+    case 'gf'
+        legend('Vaporization','Summer Low Flow','Summer High Flow','Winter Low Flow','Winter High Flow','Location','eastoutside')
+    case 'bf'
+        legend('Vaporization','Brownfield Test','Location','eastoutside')
+end
 
 subplot(hp_handle)
 hold on
@@ -44,8 +53,14 @@ for n = 1:length(case_ind)
 %     plot(H_pump_out,pressure_h,'xb')
 end
 hold off
-% legend('Vaporization','Condensation','Summer Low Flow','Summer High Flow','Winter Low Flow','Winter High Flow','Location','eastoutside')
-% legend('Vaporization','Condensation','Brownfield Test')
+switch case_test
+    case 'gm'
+        legend('Vaporization','Condensation','Test 1','Test 2','Test 3','Test 4','Location','eastoutside')
+    case 'gf'
+        legend('Vaporization','Condensation','Summer Low Flow','Summer High Flow','Winter Low Flow','Winter High Flow','Location','eastoutside')
+    case 'bf'
+        legend('Vaporization','Condensation','Brownfield Test','Location','eastoutside')
+end
 
 % find parameter index for entropy
 s_ind = calllib('coolprop','get_param_index','S');
@@ -75,52 +90,90 @@ for n = 1:length(case_ind)
 %     plot(S_pump_out,ORC_Temperature.pump_out,'xb')
 end
 hold off
-% legend('Vaporization','Condensation','Summer Low Flow','Summer High Flow','Winter Low Flow','Winter High Flow','Location','eastoutside')
-% legend('Vaporization','Condensation','Brownfield Test')
+switch case_test
+    case 'gm'
+        legend('Vaporization','Condensation','Test 1','Test 2','Test 3','Test 4','Location','eastoutside')
+    case 'gf'
+        legend('Vaporization','Condensation','Summer Low Flow','Summer High Flow','Winter Low Flow','Winter High Flow','Location','eastoutside')
+    case 'bf'
+        legend('Vaporization','Condensation','Brownfield Test','Location','eastoutside')
+end
 
 figure()
-plot(condPout/1e3)
-hold on
-plot(evapPin/1e3)
-hold off
-ylabel('Thermal Power (kW)')
+switch case_test
+    case 'bf'
+        bar([evapPin.Data(case_ind) condPout.Data(case_ind); nan(1,2)]/1e3)
+        xlim([0.5 1.5])
+    otherwise
+        bar([evapPin.Data(case_ind) condPout.Data(case_ind)]/1e3)
+end
+ylabel('Heat Flow Rate (kW_{th})')
 title('Thermal Power')
-xlabel('Time (seconds)')
+xlabel('Test')
 legend('Condenser','Evaporator')
 
 figure()
-plot(wf_flow)
+bar(wf_flow.Data(case_ind))
 ylabel('Mass Flow Rate (kg/s)')
-xlabel('Time (seconds)')
+xlabel('Test')
+ylim([0 9])
 title('Working Fluid Flow')
 
 figure()
-plot(T_water)
+switch case_test
+    case 'bf'
+        bar([T_water.Data(case_ind,:); nan(1,4)])
+        xlim([0.5 1.5])
+    otherwise
+        bar(T_water.Data(case_ind,:))
+end
 ylabel('Temperature (K)')
-xlabel('Time (seconds)')
+xlabel('Test')
 title('Water Temperature')
-legend('Source In','Source Out', 'Sink In', 'Sink out','Location', 'east')
+ylim([280 380])
+switch case_test
+    case 'gm'
+        ylim([280 380])
+    case 'gf'
+        ylim([270 370])
+    case 'bf'
+        ylim([270 370])
+end
+legend('Source In','Source Out', 'Sink In', 'Sink Out')
 
 figure()
-plot(T_wf)
+switch case_test
+    case 'bf'
+        bar([T_wf.Data(case_ind,:);nan(1,4)])
+        xlim([0.5 1.5])
+    otherwise
+        bar(T_wf.Data(case_ind,:))
+end
 ylabel('Temperature (K)')
-xlabel('Time (seconds)')
+xlabel('Test')
 title('Working Fluid Temperature')
-legend('Pump Outlet','Expander Inlet', 'Expander Outlet', 'Pump Inlet','Location', 'east')
+switch case_test
+    case 'gm'
+        ylim([280 380])
+    case 'gf'
+        ylim([270 370])
+    case 'bf'
+        ylim([270 370])
+end
+legend('Pump Out','Expander In', 'Expander Out', 'Pump In')
 
 figure()
-plot(mechPout/1e3)
-hold on
-plot(mechPneeded/1e3)
-plot(genPout/1e3)
-plot(invPout/1e3)
-plot(pumpPin/-1e3)
-% plot(errP/1e3)
-hold off
+switch case_test
+    case 'bf'
+        bar([mechPout.Data(case_ind) genPout.Data(case_ind) invPout.Data(case_ind) -pumpPin.Data(case_ind); nan(1,4)]/1e3)
+        xlim([0.5 1.5])
+    otherwise
+        bar([mechPout.Data(case_ind),genPout.Data(case_ind),invPout.Data(case_ind),-pumpPin.Data(case_ind)]/1e3)
+end
 ylabel('Power (kW)')
-xlabel('Time (seconds)')
+xlabel('Test')
 title('ORC Power')
-legend('Mechanical','Mech. Needed','Generator','Inverter','Pump Input')
+legend('Mechanical','Generator','Inverter','Pump Input')
 
 calllib('coolprop','AbstractState_free', handle_temp, ierr,herr,buffer_size);
 clear handle_temp T_temp H_temp T_ptr H_ptr

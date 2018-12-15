@@ -1,4 +1,5 @@
-path_to_include= 'C:\Users\njgreen3\Documents\MATLAB\CoolPropStuff'; %specify path to coolprop's include folder
+%path_to_include= 'C:\Users\njgreen3\Documents\MATLAB\CoolPropStuff'; %specify path to coolprop's include folder
+path_to_include= 'C:\Users\Nathan\Documents\MATLAB\CoolProp.sources\include'; %specify path to coolprop's include folder
 
 % Loading shared library
 if ~libisloaded('coolprop') %checking whether library is already loaded
@@ -50,7 +51,7 @@ m_dot_sink.time = Tin_source.time;
 m_dot_sink.signals.values = 7 * 0.99997;
 m_dot_wf_init = 1.5*3;
 m_dot_wf_max = 10;
-H_wf_init = 2.4e+05;
+H_wf_init = 2.7e+05;
 p_atm = 101325;
 p_hi.time = Tin_source.time;
 p_hi.signals.values = 6.0e5;
